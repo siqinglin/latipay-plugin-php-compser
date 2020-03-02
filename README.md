@@ -51,7 +51,7 @@ class LatipayController
     protected $config = [
         'api_key' => 'api_key',
         'user_id' => 'user_id',
-        'wallet_id' => 'wallet_id',//支付货币id
+        'wallet_id' => 'wallet_id', //钱包ID
         'version' => '2.0',//default
     ];
 
