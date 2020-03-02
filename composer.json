@@ -1,6 +1,6 @@
 {
     "name": "latipay/laravel-plugin",
-    "description": "A laravel plugin of latipay",
+    "description": "latipay-plugin php compser",
     "license": "MIT",
     "authors": [
         {
