@@ -63,7 +63,7 @@ class LatipayController
         $order = [
             'merchant_reference' => 'order_id' . time(), //商户订单号 ,当payment_method为moneymore时，每次发起支付订单id不能相同
             'amount' => '0.2',
-            'product_name' => 'test order - 测试',
+            'product_name' => '测试商品名称',
             'return_url' => 'return_url', //支付完成页面返回地址
             'callback_url' => 'callback_url', //异步通知回调地址
             'payment_method' => 'wechat', // wechat, alipay, moneymore
