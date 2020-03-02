@@ -13,29 +13,38 @@ class WebGateway implements GatewayInterface
 
     public function pay($endpoint, array $payload)
     {
-        $preHash = $payload['user_id'].$payload['wallet_id'].$payload['amount'].$payload['payment_method'].$payload['return_url'].$payload['callback_url'];
-        $payload['signature'] = hash_hmac('sha256', $preHash, $payload['api_key']);
-        $payload['ip'] = Support::clientIP();
 
-        if(isset($payload['latipya_test']) && $payload['latipya_test']) {
-            $payload['ip'] = '127.0.0.1';
+        if (isset($payload['amount'])) {
+            $payload['amount'] = sprintf("%.2f",round($payload['amount'],2));
         }
 
-        $postData = Arr::only($payload, [
-            'wallet_id',
-            'amount',
-            'currency',
-            'user_id',
-            'merchant_reference',
-            'return_url' ,
-            'callback_url',
-            'ip',
-            'version',
-            'product_name',
-            'payment_method', // wechat, latipay, onlineBank
-            'present_qr', // wechat
-            'signature'
-        ]);
+        $postData = array(
+            'user_id' => isset($payload['user_id']) ? $payload['user_id'] : '',
+            'wallet_id' => isset($payload['wallet_id']) ? $payload['wallet_id'] : '',
+            'amount' => isset($payload['amount']) ? $payload['amount'] : '',
+            'payment_method' => isset($payload['payment_method']) ? strtolower($payload['payment_method']) : '',
+            'return_url' => isset($payload['return_url']) ? $payload['return_url'] : '',
+            'callback_url' => isset($payload['callback_url']) ? $payload['callback_url'] : '',
+            'merchant_reference' => isset($payload['merchant_reference']) ? $payload['merchant_reference'] : '',
+            'ip' => isset($payload['ip']) ? $payload['ip'] : '127.0.0.1',
+            'product_name' => isset($payload['product_name']) ? $payload['product_name'] : '',
+            'version' => '2.0',
+        );
+
+        if ($postData['payment_method'] == "wechat") {
+            $postData['present_qr'] = isset($payload['present_qr']) ? $payload['present_qr'] : 1;
+        }
+
+        ksort($postData);
+        $item = array();
+        foreach ($postData as $key => $value) {
+            $item[] = $key . "=" . $value;
+        }
+        $_prehash =  join("&", $item);
+
+        $api_key = $payload['api_key'];
+        $signature = hash_hmac('sha256', $_prehash . $api_key, $api_key);
+        $postData['signature'] = $signature;
 
         $return = [];
         try {
@@ -44,7 +53,6 @@ class WebGateway implements GatewayInterface
                 "Content-Type" => "application/json"
             ];
 
-            //dd($postData, $endpoint, $options);
             $payment = Support::requestApi($postData, $endpoint, $options);
             if ($payment['host_url'] != '') {
                 $response_signature = hash_hmac('sha256', $payment['nonce'].$payment['host_url'], $payload['api_key']);

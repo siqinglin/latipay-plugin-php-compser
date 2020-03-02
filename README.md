@@ -1,4 +1,4 @@
-<h1 align="center">Latipay</h1>
+<h1 align="center">latipay-plugin php compser</h1>
 
 ## 运行环境
 - PHP 5.6+
@@ -59,13 +59,14 @@ class LatipayController
     public function index()
     {
         $order = [
-            'merchant_reference' => time(),
+            'merchant_reference' => 'order_id' . time(), //商户订单号 ,当payment_method为moneymore时，每次发起支付订单id不能相同
             'amount' => '0.2',
             'product_name' => 'test order - 测试',
-            'return_url' => 'return_url',
-            'callback_url' => 'callback_url',
-            'payment_method' => 'wechat', // wechat, alipay, onlineBank
+            'return_url' => 'return_url', //支付完成页面返回地址
+            'callback_url' => 'callback_url', //异步通知回调地址
+            'payment_method' => 'wechat', // wechat, alipay, moneymore
             'present_qr' => '1', // wechat
+            'ip' => '127.0.0.1',
         ];
 
         $result = Pay::latipay($this->config)->web($order);
@@ -84,7 +85,7 @@ class LatipayController
     //返回数组 Array(
     //    [0] => Alipay
     //    [1] => Wechat
-    //    [2] => Onlinebank
+    //    [2] => MoneyMore
     //)
     public function getLatipayMethod()
     {
