@@ -145,12 +145,14 @@ class LatipayController
             //data内容同上
 
            //回调业务逻辑
+           
+           
+           //异步通知成功：Latipay服务器期望收到 sent 文本
+           die('sent');
 
         } catch (\Exception $e) {
             // $e->getMessage();
         }
-
-        return $latipay->success();
     }
 }
 ```
