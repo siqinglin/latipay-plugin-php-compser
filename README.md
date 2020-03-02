@@ -36,6 +36,7 @@ LATIPAY_WALLET_ID_CNY=
 ```
 
 ## 使用说明
+    ##### 示例为Laravel的使用方法, 其他php框架的自己行加载config调用内部类
 
 ```php
 <?php
