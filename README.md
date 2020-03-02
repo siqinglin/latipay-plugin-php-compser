@@ -2,6 +2,7 @@
 
 ## 运行环境
 - PHP 5.6+
+- 示例为Laravel的使用方法, 其他php框架的自己行加载config调用内部类
 
 ## 安装
 ```shell
@@ -35,8 +36,8 @@ LATIPAY_WALLET_ID_AUD=
 LATIPAY_WALLET_ID_CNY=
 ```
 
-## 使用说明
-    ##### 示例为Laravel的使用方法, 其他php框架的自己行加载config调用内部类
+## 示例
+    
 
 ```php
 <?php
